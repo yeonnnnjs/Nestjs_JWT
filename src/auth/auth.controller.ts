@@ -30,9 +30,16 @@ export class AuthController {
     }
 
     @UseGuards(AuthGuard)
+    @Post('changepw')
+    changePW(@Request() req) {
+        console.log(req.user.sub, req.body.password);
+        const loginDto: LoginDto = {'email': req.user.sub, 'password': req.body.password};
+        return this.authService.changePW(loginDto);
+    }
+
+    @UseGuards(AuthGuard)
     @Get('profile')
     getProfile(@Request() req) {
-        console.log(req);
         return req.user;
     }
 }

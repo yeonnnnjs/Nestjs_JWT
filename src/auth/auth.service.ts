@@ -33,4 +33,12 @@ export class AuthService {
             throw new UnauthorizedException();
         }
     }
+
+    async changePW(loginDto: LoginDto) {
+        const user = await this.usersService.findOne(loginDto.email);
+        const salt = await bcrypt.genSalt();
+        loginDto.password = await bcrypt.hash(loginDto.password, salt);
+        this.usersService.update(user.id, loginDto);
+        return 'Change password for ' + user.name; 
+    }
 }
